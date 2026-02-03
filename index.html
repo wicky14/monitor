@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Bongkar Harian</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚚</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236366f1%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x='1' y='3' width='15' height='13' rx='2' ry='2'></rect><path d='M16 8h4l3 3v5h-7V8z'></path><circle cx='5.5' cy='18.5' r='2.5'></circle><circle cx='18.5' cy='18.5' r='2.5'></circle></svg>">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -32,10 +31,10 @@
             padding-bottom: 120px;
         }
 
-        header { 
-            text-align: left; 
-            margin-bottom: 25px; 
-            padding-left: 10px; 
+        header {
+            text-align: left;
+            margin-bottom: 25px;
+            padding-left: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -67,7 +66,7 @@
             padding: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             z-index: 1000;
         }
-        .nav-item { 
+        .nav-item {
             display: flex; flex-direction: column; align-items: center;
             color: #94a3b8; cursor: pointer; transition: 0.3s;
         }
@@ -85,7 +84,7 @@
         .btn-wa { background: var(--wa); color: white; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); }
         .btn-ghost { background: rgba(255,255,255,0.4); color: var(--text); border: 1px solid var(--glass-border); }
         .btn-danger { background: var(--danger); color: white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
-        
+
         .btn-sm { padding: 8px 14px; font-size: 0.75rem; }
         .btn-full { width: 100%; padding: 16px; margin-top: 10px; }
 
@@ -139,9 +138,9 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.1);
             animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes fadeInScale { 
-            from { opacity: 0; transform: scale(0.9); } 
-            to { opacity: 1; transform: scale(1); } 
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         input, select {
@@ -334,7 +333,7 @@
             <i data-lucide="trash-2" size="16"></i> Reset Harian
         </button>
     </div>
-    
+
     <div class="summary-stats">
         <div class="stat-box">
             <div class="stat-value" id="totalUnits">0</div>
@@ -349,7 +348,7 @@
             <div class="stat-label">PETANI</div>
         </div>
     </div>
-    
+
     <div id="captureArea">
         <div id="outputContainer"></div>
     </div>
@@ -381,7 +380,7 @@
 <div id="tab-export" class="tab-content">
     <div class="glass-card">
         <h3 style="margin-bottom:1.2rem; font-weight:800">Export & Import Data</h3>
-        
+
         <div style="margin-bottom: 25px;">
             <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Export Data Harian</h4>
             <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Unduh data hari ini dalam format JSON.</p>
@@ -389,7 +388,7 @@
                 <i data-lucide="download" size="16"></i> Export Data Hari Ini
             </button>
         </div>
-        
+
         <div style="margin-bottom: 25px;">
             <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Export Semua Data</h4>
             <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Unduh semua data yang tersimpan.</p>
@@ -397,7 +396,7 @@
                 <i data-lucide="database" size="16"></i> Export Semua Data
             </button>
         </div>
-        
+
         <div style="margin-bottom: 25px;">
             <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Import Data</h4>
             <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Upload file JSON untuk memulihkan data.</p>
@@ -409,7 +408,7 @@
                 <i data-lucide="upload" size="16"></i> Import Data
             </button>
         </div>
-        
+
         <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(0,0,0,0.1);">
             <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Informasi Data</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem;">
@@ -426,12 +425,11 @@
     </div>
 </div>
 
-<!-- Modal untuk Pilih Tanggal dengan Datepicker yang Lebih Baik -->
 <div id="modalDatePicker" class="modal-center">
     <div class="modal-center-content">
         <h3 style="margin-bottom:1.5rem; font-weight:800">Pilih Tanggal</h3>
         <div class="datepicker-container">
-            <label>TANGGAL (YYYY-MM-DD)</label>
+            <label>TANGGAL</label>
             <div class="datepicker-wrapper">
                 <input type="date" id="dateInput" class="datepicker-input" value="${new Date().toISOString().split('T')[0]}" max="${new Date().toISOString().split('T')[0]}">
                 <i data-lucide="calendar" class="calendar-icon" size="18"></i>
@@ -446,7 +444,6 @@
     </div>
 </div>
 
-<!-- Modal untuk Konfirmasi Hapus Kendaraan -->
 <div id="modalDeleteVehicle" class="modal-center">
     <div class="modal-center-content">
         <h3 style="margin-bottom:1.5rem; font-weight:800">Hapus Unit Kendaraan</h3>
@@ -462,13 +459,12 @@
     </div>
 </div>
 
-<!-- Modal untuk Konfirmasi Hapus Data -->
 <div id="modalClearData" class="modal-center">
     <div class="modal-center-content">
         <h3 style="margin-bottom:1.5rem; font-weight:800">Reset Data Harian</h3>
         <div class="alert-message" style="margin-bottom: 20px;">
             <i data-lucide="alert-triangle" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
-            <span>Semua data untuk tanggal ${new Date().toISOString().split('T')[0]} akan dihapus. Tindakan ini tidak dapat dibatalkan.</span>
+            <span id="clearDataMessage">Semua data untuk tanggal ini akan dihapus.</span>
         </div>
         <div style="margin-bottom: 20px;">
             <p style="font-size: 0.8rem; color: #64748b;">Apakah Anda yakin ingin menghapus semua data hari ini?</p>
@@ -478,30 +474,25 @@
     </div>
 </div>
 
-<!-- Modal untuk Konfirmasi Export -->
 <div id="modalExportConfirm" class="modal-center">
     <div class="modal-center-content">
         <h3 id="exportModalTitle" style="margin-bottom:1.5rem; font-weight:800">Export Data</h3>
         <div id="exportModalContent" style="margin-bottom: 20px;">
-            <!-- Konten akan diisi secara dinamis -->
-        </div>
+            </div>
         <button class="btn btn-full btn-primary" onclick="proceedExport()">Export Data</button>
         <button class="btn btn-full btn-ghost" onclick="closeModal('modalExportConfirm')">Batal</button>
     </div>
 </div>
 
-<!-- Modal untuk Info -->
 <div id="modalInfo" class="modal-center">
     <div class="modal-center-content">
         <h3 id="infoModalTitle" style="margin-bottom:1.5rem; font-weight:800">Informasi</h3>
         <div id="infoModalContent" style="margin-bottom: 20px;">
-            <!-- Konten akan diisi secara dinamis -->
-        </div>
+            </div>
         <button class="btn btn-full btn-primary" onclick="closeModal('modalInfo')">OK</button>
     </div>
 </div>
 
-<!-- Modal Quality -->
 <div id="modalQuality" class="modal-overlay">
     <div class="modal-content">
         <h3 id="qModalTitle" style="margin-bottom:1.5rem; font-weight:800">Detail Kualitas</h3>
@@ -539,11 +530,15 @@
 
 <script>
     lucide.createIcons();
-    let vehicles = {}; // Ubah dari array menjadi object { [tanggal]: arrayOfVehicles }
+    let vehicles = [];
     let physicalHistory = new Set();
-    let currentDate = new Date().toISOString().split('T')[0];
-    let exportType = '';
-    let deleteVehicleIndex = null;
+    let currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    let exportType = ''; // Untuk menyimpan jenis export yang dipilih
+    let deleteVehicleIndex = null; // Untuk menyimpan index kendaraan yang akan dihapus
+
+    // KEYS UNTUK LOCAL STORAGE
+    const DATA_KEY_PREFIX = 'qualityControlData_';
+    const GLOBAL_KEY = 'qualityControlGlobal';
 
     // Format tanggal Indonesia
     function formatDateID(dateString) {
@@ -552,26 +547,16 @@
         return date.toLocaleDateString('id-ID', options);
     }
 
-    // Ambil data kendaraan untuk tanggal tertentu
-    function getVehiclesForDate(date) {
-        if (!vehicles[date]) {
-            vehicles[date] = [];
-        }
-        return vehicles[date];
-    }
-
-    // Ambil data kendaraan untuk tanggal saat ini
-    function getCurrentVehicles() {
-        return getVehiclesForDate(currentDate);
-    }
-
     // Update tampilan tanggal
     function updateDateDisplay() {
         const today = new Date().toISOString().split('T')[0];
         const displayDate = currentDate === today ? 'Hari Ini' : formatDateID(currentDate);
         document.getElementById('currentDate').textContent = displayDate;
         document.getElementById('dateDisplay').textContent = `Quality Control - ${displayDate}`;
+
+        // Reset view saat ganti tanggal
         renderData();
+        renderVehicleManage();
         updateStats();
     }
 
@@ -585,40 +570,48 @@
     // Fungsi untuk mengganti tanggal
     function changeDate() {
         const dateInput = document.getElementById('dateInput').value;
-        
+
         if (!dateInput) {
             showInfoModal('Tanggal Kosong', 'Silakan pilih tanggal terlebih dahulu.');
             return;
         }
-        
+
         const inputDate = new Date(dateInput);
+        inputDate.setHours(0, 0, 0, 0); // Reset waktu ke awal hari
+
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        
+        today.setHours(0, 0, 0, 0); // Reset waktu ke awal hari
+
         // Validasi apakah tanggal valid
         if (isNaN(inputDate.getTime())) {
             showInfoModal('Tanggal Tidak Valid', 'Tanggal yang dipilih tidak valid.');
             return;
         }
-        
-        // Validasi apakah tanggal tidak lebih dari hari ini
+
+        // Sekarang perbandingan hanya tanggal (hari), bukan jam/menit
         if (inputDate > today) {
-            showInfoModal('Tanggal Tidak Valid', 'Tidak dapat memilih tanggal di masa depan.\nPilih tanggal maksimal hari ini.');
+            showInfoModal('Tanggal Tidak Valid', 'Tidak dapat memilih tanggal di masa depan.');
             return;
         }
-        
+
+        // Simpan data tanggal sebelumnya sebelum pindah
+        saveToLocalStorage();
+
         currentDate = dateInput;
         closeModal('modalDatePicker');
+
+        // Load data tanggal baru
+        loadFromLocalStorage();
         updateDateDisplay();
-        showInfoModal('Berhasil', `Tanggal berhasil diubah ke:\n${formatDateID(currentDate)}`);
+
+        showInfoModal('Berhasil', `Pindah ke tanggal:\n${formatDateID(currentDate)}`);
     }
 
     // Fungsi untuk menampilkan modal hapus kendaraan
     function showDeleteVehicleModal(index) {
         deleteVehicleIndex = index;
-        const currentVehicles = getCurrentVehicles();
-        const vehicle = currentVehicles[index];
-        
+        const vehicle = vehicles[index];
+
         document.getElementById('deleteVehicleMessage').textContent = `Kendaraan ${vehicle.nopol} akan dihapus. Tindakan ini tidak dapat dibatalkan.`;
         document.getElementById('deleteVehicleDetails').innerHTML = `
             • Nomor Polisi: ${vehicle.nopol}<br>
@@ -626,21 +619,20 @@
             • Tipe: ${vehicle.kategori}<br>
             • Jumlah data kualitas: ${vehicle.kualitas.length}
         `;
-        
+
         document.getElementById('modalDeleteVehicle').style.display = 'flex';
     }
 
     // Fungsi untuk menghapus kendaraan setelah konfirmasi
     function deleteVehicleConfirmed() {
         if (deleteVehicleIndex !== null) {
-            const currentVehicles = getCurrentVehicles();
-            const vehicle = currentVehicles[deleteVehicleIndex];
-            currentVehicles.splice(deleteVehicleIndex, 1);
+            const vehicle = vehicles[deleteVehicleIndex];
+            vehicles.splice(deleteVehicleIndex, 1);
             saveToLocalStorage();
             renderData();
             renderVehicleManage();
             closeModal('modalDeleteVehicle');
-            
+
             showInfoModal('Berhasil', `Kendaraan ${vehicle.nopol} berhasil dihapus.`);
             deleteVehicleIndex = null;
         }
@@ -648,6 +640,7 @@
 
     // Fungsi untuk menampilkan modal hapus data
     function showClearDataModal() {
+        document.getElementById('clearDataMessage').textContent = `Semua data untuk tanggal ${formatDateID(currentDate)} akan dihapus.`;
         document.getElementById('modalClearData').style.display = 'flex';
     }
 
@@ -656,9 +649,8 @@
         exportType = type;
         const exportModalTitle = document.getElementById('exportModalTitle');
         const exportModalContent = document.getElementById('exportModalContent');
-        
+
         if (type === 'harian') {
-            const currentVehicles = getCurrentVehicles();
             exportModalTitle.textContent = 'Export Data Harian';
             exportModalContent.innerHTML = `
                 <div class="success-message" style="margin-bottom: 15px;">
@@ -666,24 +658,40 @@
                     <span>Data untuk tanggal ${currentDate} akan diexport ke file JSON.</span>
                 </div>
                 <p style="font-size: 0.8rem; color: #64748b;">
-                    File akan berisi ${currentVehicles.length} unit kendaraan dengan total ${currentVehicles.reduce((sum, v) => sum + v.kualitas.length, 0)} data kualitas.
+                    File akan berisi ${vehicles.length} unit kendaraan dengan total ${vehicles.reduce((sum, v) => sum + v.kualitas.length, 0)} data kualitas.
                 </p>
             `;
         } else {
-            const totalVehicles = Object.values(vehicles).reduce((sum, arr) => sum + arr.length, 0);
-            const totalData = Object.values(vehicles).reduce((sum, arr) => sum + arr.reduce((s, v) => s + v.kualitas.length, 0), 0);
+            // Hitung total semua data
+            let totalAllVehicles = 0;
+            let totalAllData = 0;
+
+            // Loop Local Storage untuk menghitung estimasi
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(DATA_KEY_PREFIX)) {
+                    try {
+                        const dayData = JSON.parse(localStorage.getItem(key));
+                        if(dayData.vehicles) {
+                            totalAllVehicles += dayData.vehicles.length;
+                            totalAllData += dayData.vehicles.reduce((sum, v) => sum + v.kualitas.length, 0);
+                        }
+                    } catch(e) {}
+                }
+            }
+
             exportModalTitle.textContent = 'Export Semua Data';
             exportModalContent.innerHTML = `
                 <div class="success-message" style="margin-bottom: 15px;">
                     <i data-lucide="info" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
-                    <span>Semua data yang tersimpan akan diexport ke file JSON.</span>
+                    <span>Semua data riwayat akan diexport ke file JSON.</span>
                 </div>
                 <p style="font-size: 0.8rem; color: #64748b;">
-                    File akan berisi data dari ${Object.keys(vehicles).length} hari, total ${totalVehicles} unit kendaraan dan ${totalData} data kualitas.
+                    File akan berisi sekitar ${totalAllVehicles} unit kendaraan dari berbagai tanggal.
                 </p>
             `;
         }
-        
+
         document.getElementById('modalExportConfirm').style.display = 'flex';
     }
 
@@ -703,49 +711,83 @@
         document.getElementById(modalId).style.display = 'none';
     }
 
-    // Fungsi untuk menyimpan data ke localStorage dengan struktur per tanggal
+    // Fungsi untuk menyimpan data ke localStorage DENGAN KUNCI PER TANGGAL
     function saveToLocalStorage() {
+        // 1. Simpan data harian spesifik ke kunci tanggal
         const dataToSave = {
-            vehicles: vehicles, // Object dengan struktur { [tanggal]: array }
-            physicalHistory: Array.from(physicalHistory),
+            vehicles: vehicles,
             lastUpdated: new Date().toISOString()
         };
-        localStorage.setItem('qualityControlData', JSON.stringify(dataToSave));
+        localStorage.setItem(DATA_KEY_PREFIX + currentDate, JSON.stringify(dataToSave));
+
+        // 2. Simpan history fisik secara global (agar autocomplete tetap ada meski ganti hari)
+        const globalData = {
+            physicalHistory: Array.from(physicalHistory)
+        };
+        localStorage.setItem(GLOBAL_KEY, JSON.stringify(globalData));
+
         updateStats();
         updateDataInfo();
     }
 
-    // Fungsi untuk memuat data dari localStorage
+    // Fungsi untuk memuat data dari localStorage BERDASARKAN TANGGAL
     function loadFromLocalStorage() {
-        const savedData = localStorage.getItem('qualityControlData');
-        if (savedData) {
+        // 1. Coba migrasi data lama (jika ada data di kunci lama tanpa tanggal)
+        const oldData = localStorage.getItem('qualityControlData');
+        if (oldData) {
+            // Pindahkan ke tanggal hari ini sebagai default, lalu hapus yang lama
+            const parsedOld = JSON.parse(oldData);
+            localStorage.setItem(DATA_KEY_PREFIX + new Date().toISOString().split('T')[0], JSON.stringify({
+                vehicles: parsedOld.vehicles || [],
+                lastUpdated: new Date().toISOString()
+            }));
+            localStorage.setItem(GLOBAL_KEY, JSON.stringify({
+                physicalHistory: parsedOld.physicalHistory || []
+            }));
+            localStorage.removeItem('qualityControlData'); // Bersihkan kunci lama
+        }
+
+        // 2. Load data spesifik tanggal terpilih (currentDate)
+        const savedDailyData = localStorage.getItem(DATA_KEY_PREFIX + currentDate);
+
+        if (savedDailyData) {
             try {
-                const parsedData = JSON.parse(savedData);
-                vehicles = parsedData.vehicles || {};
-                physicalHistory = new Set(parsedData.physicalHistory || []);
+                const parsedData = JSON.parse(savedDailyData);
+                vehicles = parsedData.vehicles || [];
             } catch (e) {
-                console.error('Error loading data from localStorage:', e);
-                vehicles = {};
+                console.error('Error loading data:', e);
+                vehicles = [];
+            }
+        } else {
+            // Jika tidak ada data untuk tanggal ini, kosongkan
+            vehicles = [];
+        }
+
+        // 3. Load Global History (Autocomplete)
+        const savedGlobal = localStorage.getItem(GLOBAL_KEY);
+        if (savedGlobal) {
+            try {
+                const parsedGlobal = JSON.parse(savedGlobal);
+                physicalHistory = new Set(parsedGlobal.physicalHistory || []);
+            } catch (e) {
                 physicalHistory = new Set();
             }
         }
+
         updateStats();
         updateDataInfo();
     }
 
     // Fungsi untuk menghapus data hari ini
     function clearTodaysData() {
-        const currentVehicles = getCurrentVehicles();
-        
-        if (currentVehicles.length === 0) {
+        if (vehicles.length === 0) {
             showInfoModal('Data Kosong', 'Tidak ada data hari ini yang dapat dihapus.');
             closeModal('modalClearData');
             return;
         }
-        
-        // Hapus data untuk tanggal saat ini saja
-        vehicles[currentDate] = [];
-        physicalHistory = new Set();
+
+        vehicles = [];
+        // Jangan hapus physicalHistory agar autocomplete tidak hilang
         saveToLocalStorage();
         renderData();
         renderVehicleManage();
@@ -755,59 +797,57 @@
 
     // Fungsi untuk update statistics
     function updateStats() {
-        const currentVehicles = getCurrentVehicles();
-        const totalUnits = currentVehicles.length;
-        const totalReguler = currentVehicles.filter(v => v.kategori === 'Reguler').length;
-        const totalPetani = currentVehicles.filter(v => v.kategori === 'Petani').length;
-        
+        const totalUnits = vehicles.length;
+        const totalReguler = vehicles.filter(v => v.kategori === 'Reguler').length;
+        const totalPetani = vehicles.filter(v => v.kategori === 'Petani').length;
+        const totalData = vehicles.reduce((sum, v) => sum + v.kualitas.length, 0);
+
         document.getElementById('totalUnits').textContent = totalUnits;
         document.getElementById('totalReguler').textContent = totalReguler;
         document.getElementById('totalPetani').textContent = totalPetani;
+        document.getElementById('infoTotalUnits').textContent = totalUnits;
+        document.getElementById('infoTotalData').textContent = totalData;
     }
 
     // Fungsi untuk update informasi data di tab export
     function updateDataInfo() {
-        // Hitung total semua data dari semua tanggal
-        let totalAllVehicles = 0;
-        let totalAllData = 0;
-        
-        for (const date in vehicles) {
-            const dateVehicles = vehicles[date];
-            totalAllVehicles += dateVehicles.length;
-            totalAllData += dateVehicles.reduce((sum, v) => sum + v.kualitas.length, 0);
-        }
-        
-        document.getElementById('infoTotalUnits').textContent = totalAllVehicles;
-        document.getElementById('infoTotalData').textContent = totalAllData;
+        const totalUnits = vehicles.length;
+        const totalData = vehicles.reduce((sum, v) => sum + v.kualitas.length, 0);
+
+        document.getElementById('infoTotalUnits').textContent = totalUnits;
+        document.getElementById('infoTotalData').textContent = totalData;
     }
 
-    // Fungsi untuk cek duplikasi kendaraan (hanya di tanggal yang sama)
+    // Fungsi untuk cek duplikasi kendaraan
     function checkDuplicateVehicle(nopol, currentIndex = -1) {
-        const currentVehicles = getCurrentVehicles();
+        // Normalisasi nomor polisi (uppercase, hapus spasi)
         const normalizedNopol = nopol.toUpperCase().replace(/\s+/g, '');
-        
-        for (let i = 0; i < currentVehicles.length; i++) {
-            if (i === currentIndex) continue;
-            
-            const existingNopol = currentVehicles[i].nopol.toUpperCase().replace(/\s+/g, '');
+
+        for (let i = 0; i < vehicles.length; i++) {
+            if (i === currentIndex) continue; // Skip diri sendiri saat edit
+
+            const existingNopol = vehicles[i].nopol.toUpperCase().replace(/\s+/g, '');
             if (existingNopol === normalizedNopol) {
                 return {
                     duplicate: true,
-                    existingVehicle: currentVehicles[i]
+                    existingVehicle: vehicles[i]
                 };
             }
         }
-        
+
         return { duplicate: false };
     }
 
     // Memuat data saat halaman dimuat
     document.addEventListener('DOMContentLoaded', function() {
+        // Set tanggal default ke hari ini
+        currentDate = new Date().toISOString().split('T')[0];
+
         loadFromLocalStorage();
         updateDateDisplay();
         renderData();
         renderVehicleManage();
-        
+
         // Set max date untuk date input
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('dateInput').max = today;
@@ -819,7 +859,7 @@
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
         document.getElementById('viewTitle').innerText = title;
-        
+
         if (id === 'tab-data') {
             renderData();
             updateStats();
@@ -831,14 +871,12 @@
     }
 
     function openModalQuality(vIdx, qIdx = null) {
-        const currentVehicles = getCurrentVehicles();
-        
         document.getElementById('targetVehicleIdx').value = vIdx;
         document.getElementById('editQualityIdx').value = qIdx !== null ? qIdx : "";
         document.getElementById('qModalTitle').innerText = qIdx !== null ? "Ubah Data" : "Tambah Data";
-        
+
         if(qIdx !== null) {
-            const q = currentVehicles[vIdx].kualitas[qIdx];
+            const q = vehicles[vIdx].kualitas[qIdx];
             document.getElementById('kadarAir').value = q.air;
             document.getElementById('sap').value = q.sap;
             document.getElementById('fisik').value = q.fisik;
@@ -847,31 +885,30 @@
             document.getElementById('sap').value = 'KESELURUHAN';
             document.getElementById('fisik').value = '';
         }
-        
+
         const dl = document.getElementById('fisikList'); dl.innerHTML = '';
         physicalHistory.forEach(h => { dl.innerHTML += `<option value="${h}">`; });
         document.getElementById('modalQuality').style.display = 'flex';
     }
 
     function simpanKendaraan() {
-        const currentVehicles = getCurrentVehicles();
         const nopol = document.getElementById('nopol').value.toUpperCase();
         const noUrut = document.getElementById('noUrut').value;
         const kategori = document.getElementById('kategori').value;
         const editIdx = document.getElementById('editVehicleIdx').value;
-        
+
         if(!nopol || !noUrut) {
             showInfoModal('Data Tidak Lengkap', 'Nomor polisi dan nomor urut harus diisi.');
             return;
         }
-        
+
         // Cek duplikasi
         const duplicateCheck = checkDuplicateVehicle(nopol, editIdx !== "" ? parseInt(editIdx) : -1);
-        
+
         if (duplicateCheck.duplicate) {
             const existing = duplicateCheck.existingVehicle;
             showInfoModal(
-                'Kendaraan Sudah Ada', 
+                'Kendaraan Sudah Ada',
                 `Nomor polisi ${nopol} sudah terdaftar:\n\n` +
                 `• No. Urut: ${existing.noUrut}\n` +
                 `• Tipe: ${existing.kategori}\n` +
@@ -880,18 +917,18 @@
             );
             return;
         }
-        
+
         if(editIdx !== "") {
-            currentVehicles[editIdx] = { ...currentVehicles[editIdx], nopol, noUrut, kategori };
+            vehicles[editIdx] = { ...vehicles[editIdx], nopol, noUrut, kategori };
         } else {
-            currentVehicles.push({ nopol, noUrut, kategori, kualitas: [] });
+            vehicles.push({ nopol, noUrut, kategori, kualitas: [] });
         }
-        
+
         saveToLocalStorage();
-        resetVForm(); 
-        renderVehicleManage(); 
+        resetVForm();
+        renderVehicleManage();
         renderData();
-        
+
         // Tampilkan pesan sukses
         if (editIdx !== "") {
             showInfoModal('Berhasil', `Data kendaraan ${nopol} berhasil diperbarui.`);
@@ -911,43 +948,42 @@
     }
 
     function editKendaraan(idx) {
-        const currentVehicles = getCurrentVehicles();
-        
         document.getElementById('vFormTitle').innerText = "Edit Unit";
         document.getElementById('editVehicleIdx').value = idx;
-        document.getElementById('nopol').value = currentVehicles[idx].nopol;
-        document.getElementById('noUrut').value = currentVehicles[idx].noUrut;
-        document.getElementById('kategori').value = currentVehicles[idx].kategori;
+        document.getElementById('nopol').value = vehicles[idx].nopol;
+        document.getElementById('noUrut').value = vehicles[idx].noUrut;
+        document.getElementById('kategori').value = vehicles[idx].kategori;
         document.getElementById('btnSaveVehicle').innerText = "Update";
         document.getElementById('btnCancelEdit').style.display = "flex";
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Pindah ke tab unit
+        switchTab('tab-vehicle', document.querySelector('.nav-item:first-child'), 'Kendaraan');
     }
 
     function simpanKualitas() {
-        const currentVehicles = getCurrentVehicles();
         const vIdx = document.getElementById('targetVehicleIdx').value;
         const qIdx = document.getElementById('editQualityIdx').value;
-        const data = { 
-            air: parseFloat(document.getElementById('kadarAir').value) || 0, 
-            sap: document.getElementById('sap').value, 
-            fisik: document.getElementById('fisik').value || "-" 
+        const data = {
+            air: parseFloat(document.getElementById('kadarAir').value) || 0,
+            sap: document.getElementById('sap').value,
+            fisik: document.getElementById('fisik').value || "-"
         };
-        
+
         if (!data.air || data.air <= 0) {
             showInfoModal('Data Tidak Valid', 'Kadar air harus diisi dengan angka yang valid.');
             return;
         }
-        
+
         if(data.fisik !== "-") physicalHistory.add(data.fisik);
-        if(qIdx !== "") currentVehicles[vIdx].kualitas[qIdx] = data;
-        else currentVehicles[vIdx].kualitas.push(data);
-        
+        if(qIdx !== "") vehicles[vIdx].kualitas[qIdx] = data;
+        else vehicles[vIdx].kualitas.push(data);
+
         saveToLocalStorage();
-        closeModal('modalQuality'); 
+        closeModal('modalQuality');
         renderData();
-        
+
         // Tampilkan pesan sukses
-        const vehicle = currentVehicles[vIdx];
+        const vehicle = vehicles[vIdx];
         showInfoModal('Berhasil', `Data kualitas untuk ${vehicle.nopol} berhasil disimpan.\n\n` +
             `SAP: ${data.sap}\n` +
             `Kadar Air: ${data.air}%\n` +
@@ -956,35 +992,34 @@
 
     // Fungsi untuk capture satu kartu saja
     function captureSingleCard(cardElement, vIdx) {
-        const currentVehicles = getCurrentVehicles();
         const originalDisplay = cardElement.style.display;
         const originalMargin = cardElement.style.marginBottom;
-        
+
         // Sembunyikan tombol-tombol aksi sebelum capture
         const cardActions = cardElement.querySelector('.card-actions');
         if (cardActions) {
             cardActions.style.display = 'none';
         }
-        
+
         // Atur styling untuk capture yang lebih baik
         cardElement.style.marginBottom = '20px';
-        
-        html2canvas(cardElement, { 
-            backgroundColor: null, 
-            scale: 2, 
+
+        html2canvas(cardElement, {
+            backgroundColor: null,
+            scale: 2,
             borderRadius: 24,
             useCORS: true,
-            logging: false 
+            logging: false
         }).then(canvas => {
             // Kembalikan tampilan asli
             cardElement.style.marginBottom = originalMargin;
             if (cardActions) {
                 cardActions.style.display = 'flex';
             }
-            
+
             // Buat link untuk download
             const link = document.createElement('a');
-            const vehicle = currentVehicles[vIdx];
+            const vehicle = vehicles[vIdx];
             link.download = `Data-${vehicle.nopol}-${currentDate}.png`;
             link.href = canvas.toDataURL();
             link.click();
@@ -996,31 +1031,29 @@
 
     // Fungsi untuk share kartu via WhatsApp
     function shareSingleCardToWA(vIdx) {
-        const currentVehicles = getCurrentVehicles();
-        const vehicle = currentVehicles[vIdx];
-        
+        const vehicle = vehicles[vIdx];
         if (!vehicle || vehicle.kualitas.length === 0) {
             showInfoModal('Data Kosong', `Tidak ada data kualitas untuk kendaraan ${vehicle.nopol}.`);
             return;
         }
-        
-        const avg = vehicle.kualitas.length > 0 
-            ? (vehicle.kualitas.reduce((acc, q) => acc + q.air, 0) / vehicle.kualitas.length).toFixed(1) 
+
+        const avg = vehicle.kualitas.length > 0
+            ? (vehicle.kualitas.reduce((acc, q) => acc + q.air, 0) / vehicle.kualitas.length).toFixed(1)
             : 0;
-        
+
         let text = `DATA KENDARAAN - ${formatDateID(currentDate).toUpperCase()}\n`;
         text += `${vehicle.nopol} (No. Urut: ${vehicle.noUrut})\n`;
         text += `Tipe: ${vehicle.kategori}\n`;
         text += `Rata-rata: ${avg}%\n\n`;
         text += `Detail Pengukuran:\n`;
-        
+
         // Urutkan SAP untuk tampilan yang lebih rapi
         const sortedQuality = [...vehicle.kualitas].sort((a, b) => {
             if (a.sap === 'KESELURUHAN') return -1;
             if (b.sap === 'KESELURUHAN') return 1;
             return a.sap.localeCompare(b.sap);
         });
-        
+
         sortedQuality.forEach(q => {
             const sapLabel = q.sap === 'KESELURUHAN' ? 'Keseluruhan' : `SAP ${q.sap}`;
             text += `${sapLabel}: ${q.air}%`;
@@ -1029,33 +1062,31 @@
             }
             text += `\n`;
         });
-        
+
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     function sendAllToWA() {
-        const currentVehicles = getCurrentVehicles();
-        
-        if(currentVehicles.length === 0) {
+        if(vehicles.length === 0) {
             showInfoModal('Data Kosong', 'Tidak ada data kendaraan untuk dikirim.');
             return;
         }
-        
+
         let text = `LAPORAN DATA HARIAN - ${formatDateID(currentDate).toUpperCase()}\n`;
-        text += `Total Unit: ${currentVehicles.length} (Reguler: ${currentVehicles.filter(v => v.kategori === 'Reguler').length}, Petani: ${currentVehicles.filter(v => v.kategori === 'Petani').length})\n`;
+        text += `Total Unit: ${vehicles.length} (Reguler: ${vehicles.filter(v => v.kategori === 'Reguler').length}, Petani: ${vehicles.filter(v => v.kategori === 'Petani').length})\n`;
         text += `===============================\n\n`;
-        
+
         // TAMPILKAN DARI YANG TERBARU (terakhir ditambahkan - atas)
-        for (let i = currentVehicles.length - 1; i >= 0; i--) {
-            const v = currentVehicles[i];
-            const avg = v.kualitas.length > 0 
-                ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1) 
+        for (let i = vehicles.length - 1; i >= 0; i--) {
+            const v = vehicles[i];
+            const avg = v.kualitas.length > 0
+                ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1)
                 : 0;
-            
-            text += `${currentVehicles.length - i}. ${v.nopol} (No. Urut: ${v.noUrut})\n`;
+
+            text += `${vehicles.length - i}. ${v.nopol} (No. Urut: ${v.noUrut})\n`;
             text += `   Tipe: ${v.kategori}\n`;
             text += `   Rata-rata: ${avg}%\n`;
-            
+
             if (v.kualitas.length > 0) {
                 text += `   Detail:\n`;
                 const sortedQuality = [...v.kualitas].sort((a, b) => {
@@ -1063,7 +1094,7 @@
                     if (b.sap === 'KESELURUHAN') return 1;
                     return a.sap.localeCompare(b.sap);
                 });
-                
+
                 sortedQuality.forEach(q => {
                     const sapLabel = q.sap === 'KESELURUHAN' ? 'Keseluruhan' : `   SAP ${q.sap}`;
                     text += `${sapLabel}: ${q.air}%`;
@@ -1075,20 +1106,20 @@
             } else {
                 text += `   Belum ada data kualitas\n`;
             }
-            
+
             text += `\n`;
         }
-        
+
         text += `===============================\n`;
         text += `Monitoring Quality Control`;
-        
+
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     // Fungsi untuk proceed export setelah konfirmasi
     function proceedExport() {
         closeModal('modalExportConfirm');
-        
+
         if (exportType === 'harian') {
             exportTodaysData();
         } else {
@@ -1098,84 +1129,101 @@
 
     // Fungsi untuk export data hari ini
     function exportTodaysData() {
-        const currentVehicles = getCurrentVehicles();
-        
-        if (currentVehicles.length === 0) {
+        if (vehicles.length === 0) {
             showInfoModal('Data Kosong', 'Tidak ada data hari ini untuk diexport.');
             return;
         }
-        
+
         const dataToExport = {
-            vehicles: currentVehicles,
+            vehicles: vehicles,
+            // Kita tidak perlu export physicalHistory di harian, atau opsional
             physicalHistory: Array.from(physicalHistory),
             date: currentDate,
             exportDate: new Date().toISOString(),
-            version: '1.0'
+            version: '2.0' // Versi baru
         };
-        
+
         const dataStr = JSON.stringify(dataToExport, null, 2);
         const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-        
+
         const exportFileDefaultName = `data-harian-${currentDate}.json`;
-        
+
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', exportFileDefaultName);
         linkElement.click();
-        
-        showInfoModal('Export Berhasil', `Data harian ${currentDate} berhasil diexport!\n\nTotal: ${currentVehicles.length} unit kendaraan.`);
+
+        showInfoModal('Export Berhasil', `Data harian ${currentDate} berhasil diexport!\n\nTotal: ${vehicles.length} unit kendaraan.`);
     }
 
     // Fungsi untuk export semua data
     function exportAllData() {
-        if (Object.keys(vehicles).length === 0) {
-            showInfoModal('Data Kosong', 'Tidak ada data untuk diexport.');
+        // Kumpulkan semua data dari localStorage
+        const allData = {};
+        let totalVehiclesCount = 0;
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith(DATA_KEY_PREFIX)) {
+                try {
+                    const date = key.replace(DATA_KEY_PREFIX, '');
+                    const dayData = JSON.parse(localStorage.getItem(key));
+                    if (dayData && dayData.vehicles && dayData.vehicles.length > 0) {
+                        allData[date] = dayData.vehicles;
+                        totalVehiclesCount += dayData.vehicles.length;
+                    }
+                } catch(e) {}
+            }
+        }
+
+        if (totalVehiclesCount === 0) {
+            showInfoModal('Data Kosong', 'Tidak ada data riwayat untuk diexport.');
             return;
         }
-        
+
         const dataToExport = {
-            vehicles: vehicles,
+            archive: allData,
             physicalHistory: Array.from(physicalHistory),
             exportDate: new Date().toISOString(),
-            version: '1.0'
+            version: '2.0-archive'
         };
-        
+
         const dataStr = JSON.stringify(dataToExport, null, 2);
         const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-        
-        const exportFileDefaultName = `data-semua-${new Date().toISOString().slice(0,10)}.json`;
-        
+
+        const exportFileDefaultName = `data-semua-archive-${new Date().toISOString().slice(0,10)}.json`;
+
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', exportFileDefaultName);
         linkElement.click();
-        
-        const totalVehicles = Object.values(vehicles).reduce((sum, arr) => sum + arr.length, 0);
-        showInfoModal('Export Berhasil', `Semua data berhasil diexport!\n\nFile berisi data dari ${Object.keys(vehicles).length} hari, total ${totalVehicles} unit kendaraan.`);
+
+        showInfoModal('Export Berhasil', `Semua data berhasil diexport!\n\nFile berisi riwayat dari ${Object.keys(allData).length} hari berbeda.`);
     }
 
     // Fungsi untuk import data
     function importData() {
         const fileInput = document.getElementById('importFile');
         const file = fileInput.files[0];
-        
+
         if (!file) {
             showInfoModal('Pilih File', 'Silakan pilih file JSON terlebih dahulu.');
             return;
         }
-        
-        showInfoModal('Konfirmasi Import', 
-            'Data lama akan diganti dengan data baru.\n\n' +
-            'Pastikan Anda telah melakukan backup data sebelumnya.\n\n' +
+
+        showInfoModal('Konfirmasi Import',
+            'Data yang diimport akan digabungkan/ditimpa.\n' +
+            'Pastikan format file benar (JSON Export).\n\n' +
             'Klik OK untuk melanjutkan import data.'
         );
-        
+
         // Buat event listener khusus untuk modal info OK
         const modalInfo = document.getElementById('modalInfo');
-        const originalOnClick = modalInfo.querySelector('.btn-primary').onclick;
-        
-        modalInfo.querySelector('.btn-primary').onclick = function() {
-            modalInfo.querySelector('.btn-primary').onclick = originalOnClick;
+        const btnOk = modalInfo.querySelector('.btn-primary');
+        const originalOnClick = btnOk.onclick;
+
+        btnOk.onclick = function() {
+            btnOk.onclick = originalOnClick;
             closeModal('modalInfo');
             proceedImport(file);
         };
@@ -1184,102 +1232,93 @@
     // Fungsi untuk proceed import setelah konfirmasi
     function proceedImport(file) {
         const reader = new FileReader();
-        
+
         reader.onload = function(e) {
             try {
                 const importedData = JSON.parse(e.target.result);
-                
-                // Validasi struktur data
-                if (!importedData.vehicles) {
-                    throw new Error('Format file tidak valid. Data vehicles tidak ditemukan.');
-                }
-                
-                // Jika import data harian
-                if (Array.isArray(importedData.vehicles)) {
-                    // Data harian - tambahkan ke tanggal saat ini
-                    const currentVehicles = getCurrentVehicles();
-                    const importedVehicles = importedData.vehicles;
-                    
-                    // Cek duplikasi
-                    for (const importedVehicle of importedVehicles) {
-                        const duplicateCheck = checkDuplicateVehicle(importedVehicle.nopol);
-                        
-                        if (duplicateCheck.duplicate) {
-                            // Ganti data yang ada
-                            const existingIndex = currentVehicles.findIndex(v => 
-                                v.nopol.toUpperCase().replace(/\s+/g, '') === 
-                                importedVehicle.nopol.toUpperCase().replace(/\s+/g, '')
-                            );
-                            
-                            if (existingIndex !== -1) {
-                                currentVehicles[existingIndex] = importedVehicle;
-                            }
-                        } else {
-                            currentVehicles.push(importedVehicle);
-                        }
+
+                // Cek tipe import (Archive atau Harian)
+                if (importedData.version === '2.0-archive' && importedData.archive) {
+                    // Import Archive
+                    let daysImported = 0;
+                    for (const [date, vehiclesList] of Object.entries(importedData.archive)) {
+                        const key = DATA_KEY_PREFIX + date;
+                        const dataToSave = {
+                            vehicles: vehiclesList,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        localStorage.setItem(key, JSON.stringify(dataToSave));
+                        daysImported++;
                     }
-                    
-                    // Update physical history
-                    if (importedData.physicalHistory) {
-                        importedData.physicalHistory.forEach(h => physicalHistory.add(h));
+                    // Refresh view jika tanggal saat ini termasuk yg diimport
+                    if (importedData.archive[currentDate]) {
+                        loadFromLocalStorage();
                     }
-                    
-                    saveToLocalStorage();
-                    renderData();
-                    renderVehicleManage();
-                    
-                    showInfoModal('Import Berhasil', 
-                        `Data harian berhasil diimport!\n\n` +
-                        `• Total unit sekarang: ${currentVehicles.length}\n` +
-                        `• Unit baru ditambahkan: ${importedVehicles.length}`
-                    );
-                    
-                } else if (typeof importedData.vehicles === 'object') {
-                    // Data semua - ganti semua data
-                    vehicles = importedData.vehicles;
-                    physicalHistory = new Set(importedData.physicalHistory || []);
-                    
-                    saveToLocalStorage();
-                    renderData();
-                    renderVehicleManage();
-                    
-                    const totalVehicles = Object.values(vehicles).reduce((sum, arr) => sum + arr.length, 0);
-                    showInfoModal('Import Berhasil', 
-                        `Semua data berhasil diimport!\n\n` +
-                        `• Data dari ${Object.keys(vehicles).length} hari\n` +
-                        `• Total ${totalVehicles} unit kendaraan`
-                    );
+                    showInfoModal('Import Sukses', `Berhasil import data arsip untuk ${daysImported} hari.`);
+
+                } else if (importedData.vehicles && Array.isArray(importedData.vehicles)) {
+                    // Import Harian (logika lama, tapi disesuaikan dengan struktur baru)
+
+                    // Kita asumsikan import harian masuk ke tanggal saat ini (currentDate)
+                    // Atau gunakan tanggal dari file jika ada
+                    const targetDate = importedData.date || currentDate;
+
+                    // Logika merge sederhana: Timpa data tanggal tersebut
+                    const dataToSave = {
+                        vehicles: importedData.vehicles,
+                        lastUpdated: new Date().toISOString()
+                    };
+
+                    localStorage.setItem(DATA_KEY_PREFIX + targetDate, JSON.stringify(dataToSave));
+
+                    // Update global history
+                    if(importedData.physicalHistory) {
+                        const combinedHistory = new Set([...physicalHistory, ...importedData.physicalHistory]);
+                        localStorage.setItem(GLOBAL_KEY, JSON.stringify({
+                            physicalHistory: Array.from(combinedHistory)
+                        }));
+                    }
+
+                    // Reload
+                    if (targetDate === currentDate) {
+                        loadFromLocalStorage();
+                    } else {
+                        showInfoModal('Info Import', `Data diimport ke tanggal: ${targetDate}.\nSilakan ganti tanggal untuk melihat.`);
+                    }
+
+                    if (targetDate === currentDate) {
+                         showInfoModal('Import Berhasil', `Data berhasil dimuat untuk hari ini.`);
+                    }
+
                 } else {
-                    throw new Error('Format vehicles tidak valid.');
+                    throw new Error('Format file tidak dikenali.');
                 }
-                
+
                 // Reset file input
                 document.getElementById('importFile').value = '';
-                
+
             } catch (error) {
                 console.error('Error importing data:', error);
-                showInfoModal('Import Gagal', 
+                showInfoModal('Import Gagal',
                     'Error: ' + error.message + '\n\n' +
                     'Pastikan file yang dipilih adalah file export dari aplikasi ini.'
                 );
             }
         };
-        
+
         reader.onerror = function() {
             showInfoModal('Error Membaca File', 'Error membaca file. Pastikan file tidak rusak.');
         };
-        
+
         reader.readAsText(file);
     }
 
     function captureToImage() {
-        const currentVehicles = getCurrentVehicles();
-        
-        if (currentVehicles.length === 0) {
+        if (vehicles.length === 0) {
             showInfoModal('Data Kosong', 'Tidak ada data untuk difoto.');
             return;
         }
-        
+
         const area = document.getElementById('captureArea');
         html2canvas(area, { backgroundColor: null, scale: 2, borderRadius: 24 }).then(canvas => {
             const link = document.createElement('a');
@@ -1291,42 +1330,41 @@
 
     function renderData() {
         const container = document.getElementById('outputContainer');
-        const currentVehicles = getCurrentVehicles();
-        
-        if (currentVehicles.length === 0) {
+
+        if (vehicles.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <i data-lucide="package" size="48"></i>
-                    <p>Belum ada data untuk ${formatDateID(currentDate)}</p>
+                    <p>Belum ada data untuk hari ini</p>
                     <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 10px;">Tambahkan unit kendaraan di tab "Unit"</p>
                 </div>
             `;
             lucide.createIcons();
             return;
         }
-        
+
         container.innerHTML = '';
-        
+
         // TAMPILKAN TERBARU DI ATAS (data terakhir ditambahkan)
-        for (let i = currentVehicles.length - 1; i >= 0; i--) {
-            const v = currentVehicles[i];
+        for (let i = vehicles.length - 1; i >= 0; i--) {
+            const v = vehicles[i];
             const avg = v.kualitas.length > 0 ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1) : "0.0";
             const card = document.createElement('div');
             card.className = 'glass-card';
             card.id = `vehicle-card-${i}`;
-            
+
             let qHtml = '';
             v.kualitas.forEach((q, qIdx) => {
                 qHtml += `<div class="quality-item"><div style="font-size:0.75rem"><b>SAP ${q.sap}:</b> ${q.air}% <span style="opacity:0.5; margin-left:5px">${q.fisik}</span></div>
                     <button class="btn btn-ghost" style="padding:5px" onclick="openModalQuality(${i}, ${qIdx})"><i data-lucide="edit-2" size="12"></i></button></div>`;
             });
-            
+
             card.innerHTML = `
                 <div class="card-header">
                     <div>
                         <h3 style="font-weight:800; color:var(--text); font-size:1.1rem">${v.nopol}</h3>
                         <p style="font-size:0.65rem; font-weight:700; opacity:0.5; display: flex; align-items: center; gap: 5px;">
-                            #${v.noUrut} 
+                            #${v.noUrut}
                             <span class="tipe-badge ${v.kategori === 'Reguler' ? 'tipe-reguler' : 'tipe-petani'}">
                                 ${v.kategori}
                             </span>
@@ -1356,18 +1394,16 @@
 
     function renderVehicleManage() {
         const container = document.getElementById('vehicleManageList');
-        const currentVehicles = getCurrentVehicles();
-        
-        container.innerHTML = `<p style="font-size:0.7rem; font-weight:800; opacity:0.4; margin:10px 0">DATA UNIT - ${formatDateID(currentDate)}</p>`;
-        
-        if (currentVehicles.length === 0) {
-            container.innerHTML += '<div style="text-align:center; padding:30px; opacity:0.3">Belum ada data unit untuk tanggal ini</div>';
+        container.innerHTML = '<p style="font-size:0.7rem; font-weight:800; opacity:0.4; margin:10px 0">DATA UNIT HARIAN</p>';
+
+        if (vehicles.length === 0) {
+            container.innerHTML += '<div style="text-align:center; padding:30px; opacity:0.3">Belum ada data unit hari ini</div>';
             return;
         }
-        
+
         // TAMPILKAN TERBARU DI ATAS (data terakhir ditambahkan)
-        for (let i = currentVehicles.length - 1; i >= 0; i--) {
-            const v = currentVehicles[i];
+        for (let i = vehicles.length - 1; i >= 0; i--) {
+            const v = vehicles[i];
             const badgeClass = v.kategori === 'Reguler' ? 'tipe-reguler' : 'tipe-petani';
             container.innerHTML += `
                 <div class="glass-card" style="padding:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center">
@@ -1398,7 +1434,7 @@
 
     // Event listener untuk klik di luar modal
     window.onclick = function(e) {
-        if (e.target.className === 'modal-overlay' || 
+        if (e.target.className === 'modal-overlay' ||
             e.target.className === 'modal-center') {
             e.target.style.display = 'none';
         }
