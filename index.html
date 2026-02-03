@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Bongkar Harian</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --primary: #6366f1;
+            --accent: #10b981;
+            --wa: #22c55e;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 50%, #fef2f2 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px;
+            padding-bottom: 120px;
+        }
+
+        header { 
+            text-align: left; 
+            margin-bottom: 25px; 
+            padding-left: 10px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h2 { font-weight: 800; font-size: 1.6rem; color: var(--text); letter-spacing: -0.5px; }
+        header p { font-size: 0.8rem; opacity: 0.6; }
+
+        /* Estetika Glassmorphism */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+        }
+
+        /* Navigasi Bawah Modern */
+        .bottom-nav {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 35px;
+            display: flex; justify-content: space-around;
+            padding: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center;
+            color: #94a3b8; cursor: pointer; transition: 0.3s;
+        }
+        .nav-item.active { color: var(--primary); transform: translateY(-2px); }
+        .nav-item div { font-size: 0.6rem; font-weight: 800; margin-top: 4px; text-transform: uppercase; }
+
+        /* Buttons Custom */
+        .btn {
+            border: none; border-radius: 16px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        .btn-wa { background: var(--wa); color: white; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); }
+        .btn-ghost { background: rgba(255,255,255,0.4); color: var(--text); border: 1px solid var(--glass-border); }
+        .btn-danger { background: var(--danger); color: white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+        
+        .btn-sm { padding: 8px 14px; font-size: 0.75rem; }
+        .btn-full { width: 100%; padding: 16px; margin-top: 10px; }
+
+        /* List Items */
+        .quality-item {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-top: 8px; padding: 12px; border-radius: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .avg-badge {
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            color: white; padding: 4px 12px; border-radius: 12px;
+            font-size: 0.75rem; font-weight: 800;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.1); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: flex-end; z-index: 2000;
+        }
+        .modal-content {
+            width: 100%; max-width: 500px; background: rgba(255,255,255,0.9);
+            border-radius: 32px 32px 0 0; padding: 2rem;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* Modal Center */
+        .modal-center {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-center-content {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInScale { 
+            from { opacity: 0; transform: scale(0.9); } 
+            to { opacity: 1; transform: scale(1); } 
+        }
+
+        input, select {
+            width: 100%; background: white; border: 1px solid #e2e8f0;
+            border-radius: 14px; padding: 14px; outline: none; margin-top: 5px;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        label { font-size: 0.75rem; font-weight: 700; color: #64748b; margin-left: 5px; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Card header actions */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .card-actions .btn-sm {
+            padding: 6px 10px;
+            min-width: 36px;
+        }
+
+        /* Tipe badge */
+        .tipe-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+        .tipe-reguler {
+            background-color: rgba(99, 102, 241, 0.2);
+            color: #4f46e5;
+        }
+        .tipe-petani {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+        }
+
+        /* Tanggal Picker */
+        .date-picker {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .date-picker:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Summary Stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+        }
+        .stat-value {
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 0.6rem;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+        .empty-state i {
+            opacity: 0.3;
+            margin-bottom: 15px;
+        }
+        .empty-state p {
+            font-size: 0.8rem;
+        }
+
+        /* Alert Message */
+        .alert-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            color: #dc2626;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            color: #16a34a;
+        }
+
+        /* Datepicker Custom */
+        .datepicker-container {
+            margin-bottom: 20px;
+        }
+        .datepicker-wrapper {
+            position: relative;
+            margin-top: 5px;
+        }
+        .datepicker-input {
+            width: 100%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            outline: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .datepicker-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        .calendar-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        /* Vehicle Actions */
+        .vehicle-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .vehicle-actions .btn-sm {
+            padding: 6px;
+            min-width: 32px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h2 id="viewTitle">Monitoring Data</h2>
+        <p id="dateDisplay">Quality Control Harian</p>
+    </div>
+    <div class="date-picker" onclick="showDatePickerModal()">
+        <i data-lucide="calendar" size="16"></i>
+        <span id="currentDate">Hari Ini</span>
+    </div>
+</header>
+
+<div id="tab-data" class="tab-content active">
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button class="btn btn-sm btn-wa" style="flex:1" onclick="sendAllToWA()">
+            <i data-lucide="send" size="16"></i> Rekap WA
+        </button>
+        <button class="btn btn-sm btn-ghost" style="flex:1" onclick="captureToImage()">
+            <i data-lucide="camera" size="16"></i> Foto Data
+        </button>
+        <button class="btn btn-sm btn-ghost" style="flex:1" onclick="showClearDataModal()">
+            <i data-lucide="trash-2" size="16"></i> Reset Harian
+        </button>
+    </div>
+    
+    <div class="summary-stats">
+        <div class="stat-box">
+            <div class="stat-value" id="totalUnits">0</div>
+            <div class="stat-label">TOTAL UNIT</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" id="totalReguler">0</div>
+            <div class="stat-label">REGULER</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" id="totalPetani">0</div>
+            <div class="stat-label">PETANI</div>
+        </div>
+    </div>
+    
+    <div id="captureArea">
+        <div id="outputContainer"></div>
+    </div>
+</div>
+
+<div id="tab-vehicle" class="tab-content">
+    <div class="glass-card">
+        <h3 id="vFormTitle" style="margin-bottom:1.2rem; font-weight:800">Unit Baru</h3>
+        <input type="hidden" id="editVehicleIdx">
+        <div style="margin-bottom: 15px;">
+            <label>NOMOR POLISI</label>
+            <input type="text" id="nopol" placeholder="B 1234 ABC" style="text-transform: uppercase;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+            <div><label>NO. URUT</label><input type="number" id="noUrut"></div>
+            <div><label>TIPE</label>
+                <select id="kategori">
+                    <option value="Reguler">Reguler</option>
+                    <option value="Petani">Petani</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-full btn-primary" id="btnSaveVehicle" onclick="simpanKendaraan()">Simpan Kendaraan</button>
+        <button class="btn btn-full btn-ghost" id="btnCancelEdit" style="display:none" onclick="resetVForm()">Batal</button>
+    </div>
+    <div id="vehicleManageList"></div>
+</div>
+
+<div id="tab-export" class="tab-content">
+    <div class="glass-card">
+        <h3 style="margin-bottom:1.2rem; font-weight:800">Export & Import Data</h3>
+        
+        <div style="margin-bottom: 25px;">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Export Data Harian</h4>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Unduh data hari ini dalam format JSON.</p>
+            <button class="btn btn-full btn-primary" onclick="showExportConfirmModal('harian')">
+                <i data-lucide="download" size="16"></i> Export Data Hari Ini
+            </button>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Export Semua Data</h4>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Unduh semua data yang tersimpan.</p>
+            <button class="btn btn-full btn-ghost" onclick="showExportConfirmModal('semua')">
+                <i data-lucide="database" size="16"></i> Export Semua Data
+            </button>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Import Data</h4>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Upload file JSON untuk memulihkan data.</p>
+            <div style="margin-bottom: 15px;">
+                <label>PILIH FILE JSON</label>
+                <input type="file" id="importFile" accept=".json" style="padding: 10px;">
+            </div>
+            <button class="btn btn-full btn-ghost" onclick="importData()">
+                <i data-lucide="upload" size="16"></i> Import Data
+            </button>
+        </div>
+        
+        <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(0,0,0,0.1);">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--text);">Informasi Data</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem;">
+                <div style="background: rgba(255,255,255,0.3); padding: 10px; border-radius: 12px;">
+                    <div style="color: #64748b;">Total Unit</div>
+                    <div style="font-weight: 800; font-size: 1.2rem;" id="infoTotalUnits">0</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.3); padding: 10px; border-radius: 12px;">
+                    <div style="color: #64748b;">Total Data</div>
+                    <div style="font-weight: 800; font-size: 1.2rem;" id="infoTotalData">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal untuk Pilih Tanggal dengan Datepicker yang Lebih Baik -->
+<div id="modalDatePicker" class="modal-center">
+    <div class="modal-center-content">
+        <h3 style="margin-bottom:1.5rem; font-weight:800">Pilih Tanggal</h3>
+        <div class="datepicker-container">
+            <label>TANGGAL (YYYY-MM-DD)</label>
+            <div class="datepicker-wrapper">
+                <input type="date" id="dateInput" class="datepicker-input" value="${new Date().toISOString().split('T')[0]}" max="${new Date().toISOString().split('T')[0]}">
+                <i data-lucide="calendar" class="calendar-icon" size="18"></i>
+            </div>
+        </div>
+        <div style="margin-top: 20px; font-size: 0.8rem; color: #64748b; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 12px;">
+            <i data-lucide="info" size="14" style="vertical-align: middle; margin-right: 8px;"></i>
+            <span>Anda dapat memilih tanggal maksimal hari ini.</span>
+        </div>
+        <button class="btn btn-full btn-primary" onclick="changeDate()" style="margin-top: 20px;">Ganti Tanggal</button>
+        <button class="btn btn-full btn-ghost" onclick="closeModal('modalDatePicker')">Batal</button>
+    </div>
+</div>
+
+<!-- Modal untuk Konfirmasi Hapus Kendaraan -->
+<div id="modalDeleteVehicle" class="modal-center">
+    <div class="modal-center-content">
+        <h3 style="margin-bottom:1.5rem; font-weight:800">Hapus Unit Kendaraan</h3>
+        <div class="alert-message" style="margin-bottom: 20px;">
+            <i data-lucide="alert-triangle" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
+            <span id="deleteVehicleMessage">Semua data kendaraan ini akan dihapus. Tindakan ini tidak dapat dibatalkan.</span>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <p style="font-size: 0.8rem; color: #64748b;" id="deleteVehicleDetails"></p>
+        </div>
+        <button class="btn btn-full btn-danger" onclick="deleteVehicleConfirmed()">Ya, Hapus Unit</button>
+        <button class="btn btn-full btn-ghost" onclick="closeModal('modalDeleteVehicle')">Batal</button>
+    </div>
+</div>
+
+<!-- Modal untuk Konfirmasi Hapus Data -->
+<div id="modalClearData" class="modal-center">
+    <div class="modal-center-content">
+        <h3 style="margin-bottom:1.5rem; font-weight:800">Reset Data Harian</h3>
+        <div class="alert-message" style="margin-bottom: 20px;">
+            <i data-lucide="alert-triangle" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
+            <span>Semua data untuk tanggal ${new Date().toISOString().split('T')[0]} akan dihapus. Tindakan ini tidak dapat dibatalkan.</span>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <p style="font-size: 0.8rem; color: #64748b;">Apakah Anda yakin ingin menghapus semua data hari ini?</p>
+        </div>
+        <button class="btn btn-full btn-danger" onclick="clearTodaysData()">Ya, Hapus Data</button>
+        <button class="btn btn-full btn-ghost" onclick="closeModal('modalClearData')">Batal</button>
+    </div>
+</div>
+
+<!-- Modal untuk Konfirmasi Export -->
+<div id="modalExportConfirm" class="modal-center">
+    <div class="modal-center-content">
+        <h3 id="exportModalTitle" style="margin-bottom:1.5rem; font-weight:800">Export Data</h3>
+        <div id="exportModalContent" style="margin-bottom: 20px;">
+            <!-- Konten akan diisi secara dinamis -->
+        </div>
+        <button class="btn btn-full btn-primary" onclick="proceedExport()">Export Data</button>
+        <button class="btn btn-full btn-ghost" onclick="closeModal('modalExportConfirm')">Batal</button>
+    </div>
+</div>
+
+<!-- Modal untuk Info -->
+<div id="modalInfo" class="modal-center">
+    <div class="modal-center-content">
+        <h3 id="infoModalTitle" style="margin-bottom:1.5rem; font-weight:800">Informasi</h3>
+        <div id="infoModalContent" style="margin-bottom: 20px;">
+            <!-- Konten akan diisi secara dinamis -->
+        </div>
+        <button class="btn btn-full btn-primary" onclick="closeModal('modalInfo')">OK</button>
+    </div>
+</div>
+
+<!-- Modal Quality -->
+<div id="modalQuality" class="modal-overlay">
+    <div class="modal-content">
+        <h3 id="qModalTitle" style="margin-bottom:1.5rem; font-weight:800">Detail Kualitas</h3>
+        <input type="hidden" id="targetVehicleIdx">
+        <input type="hidden" id="editQualityIdx">
+        <div style="margin-bottom: 15px;"><label>KADAR AIR (%)</label><input type="number" step="0.1" id="kadarAir"></div>
+        <div style="margin-bottom: 15px;"><label>SAP</label>
+            <select id="sap">
+                <option value="KESELURUHAN">KESELURUHAN</option>
+                <option value="1">SAP 1</option><option value="2">SAP 2</option>
+                <option value="3">SAP 3</option><option value="4">SAP 4</option>
+                <option value="5">SAP 5</option>
+            </select>
+        </div>
+        <div style="margin-bottom: 20px;"><label>KONDISI FISIK</label>
+            <input type="text" id="fisik" list="fisikList" placeholder="Ketik fisik...">
+            <datalist id="fisikList"></datalist>
+        </div>
+        <button class="btn btn-full btn-primary" onclick="simpanKualitas()">Simpan Data</button>
+        <button class="btn btn-full btn-ghost" onclick="closeModal('modalQuality')">Kembali</button>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <div class="nav-item" onclick="switchTab('tab-vehicle', this, 'Kendaraan')">
+        <i data-lucide="plus-square"></i><div>Unit</div>
+    </div>
+    <div class="nav-item active" onclick="switchTab('tab-data', this, 'Monitoring Data')">
+        <i data-lucide="bar-chart-3"></i><div>Data</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('tab-export', this, 'Export & Import')">
+        <i data-lucide="database"></i><div>Data</div>
+    </div>
+</nav>
+
+<script>
+    lucide.createIcons();
+    let vehicles = [];
+    let physicalHistory = new Set();
+    let currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    let exportType = ''; // Untuk menyimpan jenis export yang dipilih
+    let deleteVehicleIndex = null; // Untuk menyimpan index kendaraan yang akan dihapus
+
+    // Format tanggal Indonesia
+    function formatDateID(dateString) {
+        const date = new Date(dateString);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('id-ID', options);
+    }
+
+    // Update tampilan tanggal
+    function updateDateDisplay() {
+        const today = new Date().toISOString().split('T')[0];
+        const displayDate = currentDate === today ? 'Hari Ini' : formatDateID(currentDate);
+        document.getElementById('currentDate').textContent = displayDate;
+        document.getElementById('dateDisplay').textContent = `Quality Control - ${displayDate}`;
+        renderData();
+        updateStats();
+    }
+
+    // Fungsi untuk menampilkan modal date picker
+    function showDatePickerModal() {
+        document.getElementById('dateInput').value = currentDate;
+        document.getElementById('modalDatePicker').style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    // Fungsi untuk mengganti tanggal
+    function changeDate() {
+        const dateInput = document.getElementById('dateInput').value;
+        
+        if (!dateInput) {
+            showInfoModal('Tanggal Kosong', 'Silakan pilih tanggal terlebih dahulu.');
+            return;
+        }
+        
+        const inputDate = new Date(dateInput);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        // Validasi apakah tanggal valid
+        if (isNaN(inputDate.getTime())) {
+            showInfoModal('Tanggal Tidak Valid', 'Tanggal yang dipilih tidak valid.');
+            return;
+        }
+        
+        // Validasi apakah tanggal tidak lebih dari hari ini
+        if (inputDate > today) {
+            showInfoModal('Tanggal Tidak Valid', 'Tidak dapat memilih tanggal di masa depan.\nPilih tanggal maksimal hari ini.');
+            return;
+        }
+        
+        currentDate = dateInput;
+        closeModal('modalDatePicker');
+        updateDateDisplay();
+        showInfoModal('Berhasil', `Tanggal berhasil diubah ke:\n${formatDateID(currentDate)}`);
+    }
+
+    // Fungsi untuk menampilkan modal hapus kendaraan
+    function showDeleteVehicleModal(index) {
+        deleteVehicleIndex = index;
+        const vehicle = vehicles[index];
+        
+        document.getElementById('deleteVehicleMessage').textContent = `Kendaraan ${vehicle.nopol} akan dihapus. Tindakan ini tidak dapat dibatalkan.`;
+        document.getElementById('deleteVehicleDetails').innerHTML = `
+            • Nomor Polisi: ${vehicle.nopol}<br>
+            • No. Urut: ${vehicle.noUrut}<br>
+            • Tipe: ${vehicle.kategori}<br>
+            • Jumlah data kualitas: ${vehicle.kualitas.length}
+        `;
+        
+        document.getElementById('modalDeleteVehicle').style.display = 'flex';
+    }
+
+    // Fungsi untuk menghapus kendaraan setelah konfirmasi
+    function deleteVehicleConfirmed() {
+        if (deleteVehicleIndex !== null) {
+            const vehicle = vehicles[deleteVehicleIndex];
+            vehicles.splice(deleteVehicleIndex, 1);
+            saveToLocalStorage();
+            renderData();
+            renderVehicleManage();
+            closeModal('modalDeleteVehicle');
+            
+            showInfoModal('Berhasil', `Kendaraan ${vehicle.nopol} berhasil dihapus.`);
+            deleteVehicleIndex = null;
+        }
+    }
+
+    // Fungsi untuk menampilkan modal hapus data
+    function showClearDataModal() {
+        document.getElementById('modalClearData').style.display = 'flex';
+    }
+
+    // Fungsi untuk menampilkan modal konfirmasi export
+    function showExportConfirmModal(type) {
+        exportType = type;
+        const exportModalTitle = document.getElementById('exportModalTitle');
+        const exportModalContent = document.getElementById('exportModalContent');
+        
+        if (type === 'harian') {
+            exportModalTitle.textContent = 'Export Data Harian';
+            exportModalContent.innerHTML = `
+                <div class="success-message" style="margin-bottom: 15px;">
+                    <i data-lucide="info" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
+                    <span>Data untuk tanggal ${currentDate} akan diexport ke file JSON.</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b;">
+                    File akan berisi ${vehicles.length} unit kendaraan dengan total ${vehicles.reduce((sum, v) => sum + v.kualitas.length, 0)} data kualitas.
+                </p>
+            `;
+        } else {
+            const allData = localStorage.getItem('qualityControlData');
+            const parsedData = allData ? JSON.parse(allData) : { vehicles: [] };
+            exportModalTitle.textContent = 'Export Semua Data';
+            exportModalContent.innerHTML = `
+                <div class="success-message" style="margin-bottom: 15px;">
+                    <i data-lucide="info" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
+                    <span>Semua data yang tersimpan akan diexport ke file JSON.</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b;">
+                    File akan berisi ${parsedData.vehicles.length} unit kendaraan dengan total ${parsedData.vehicles.reduce((sum, v) => sum + v.kualitas.length, 0)} data kualitas.
+                </p>
+            `;
+        }
+        
+        document.getElementById('modalExportConfirm').style.display = 'flex';
+    }
+
+    // Fungsi untuk menampilkan modal informasi
+    function showInfoModal(title, message) {
+        document.getElementById('infoModalTitle').textContent = title;
+        document.getElementById('infoModalContent').innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <p style="font-size: 0.9rem; color: var(--text); white-space: pre-line;">${message}</p>
+            </div>
+        `;
+        document.getElementById('modalInfo').style.display = 'flex';
+    }
+
+    // Fungsi untuk menutup modal
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Fungsi untuk menyimpan data ke localStorage dengan struktur harian
+    function saveToLocalStorage() {
+        const dataToSave = {
+            vehicles: vehicles,
+            physicalHistory: Array.from(physicalHistory),
+            lastUpdated: new Date().toISOString()
+        };
+        localStorage.setItem('qualityControlData', JSON.stringify(dataToSave));
+        updateStats();
+        updateDataInfo();
+    }
+
+    // Fungsi untuk memuat data dari localStorage
+    function loadFromLocalStorage() {
+        const savedData = localStorage.getItem('qualityControlData');
+        if (savedData) {
+            try {
+                const parsedData = JSON.parse(savedData);
+                vehicles = parsedData.vehicles || [];
+                physicalHistory = new Set(parsedData.physicalHistory || []);
+            } catch (e) {
+                console.error('Error loading data from localStorage:', e);
+                vehicles = [];
+                physicalHistory = new Set();
+            }
+        }
+        updateStats();
+        updateDataInfo();
+    }
+
+    // Fungsi untuk menghapus data hari ini
+    function clearTodaysData() {
+        if (vehicles.length === 0) {
+            showInfoModal('Data Kosong', 'Tidak ada data hari ini yang dapat dihapus.');
+            closeModal('modalClearData');
+            return;
+        }
+        
+        vehicles = [];
+        physicalHistory = new Set();
+        saveToLocalStorage();
+        renderData();
+        renderVehicleManage();
+        closeModal('modalClearData');
+        showInfoModal('Berhasil', 'Data hari ini telah dihapus.');
+    }
+
+    // Fungsi untuk update statistics
+    function updateStats() {
+        const totalUnits = vehicles.length;
+        const totalReguler = vehicles.filter(v => v.kategori === 'Reguler').length;
+        const totalPetani = vehicles.filter(v => v.kategori === 'Petani').length;
+        const totalData = vehicles.reduce((sum, v) => sum + v.kualitas.length, 0);
+        
+        document.getElementById('totalUnits').textContent = totalUnits;
+        document.getElementById('totalReguler').textContent = totalReguler;
+        document.getElementById('totalPetani').textContent = totalPetani;
+        document.getElementById('infoTotalUnits').textContent = totalUnits;
+        document.getElementById('infoTotalData').textContent = totalData;
+    }
+
+    // Fungsi untuk update informasi data di tab export
+    function updateDataInfo() {
+        const totalUnits = vehicles.length;
+        const totalData = vehicles.reduce((sum, v) => sum + v.kualitas.length, 0);
+        
+        document.getElementById('infoTotalUnits').textContent = totalUnits;
+        document.getElementById('infoTotalData').textContent = totalData;
+    }
+
+    // Fungsi untuk cek duplikasi kendaraan
+    function checkDuplicateVehicle(nopol, currentIndex = -1) {
+        // Normalisasi nomor polisi (uppercase, hapus spasi)
+        const normalizedNopol = nopol.toUpperCase().replace(/\s+/g, '');
+        
+        for (let i = 0; i < vehicles.length; i++) {
+            if (i === currentIndex) continue; // Skip diri sendiri saat edit
+            
+            const existingNopol = vehicles[i].nopol.toUpperCase().replace(/\s+/g, '');
+            if (existingNopol === normalizedNopol) {
+                return {
+                    duplicate: true,
+                    existingVehicle: vehicles[i]
+                };
+            }
+        }
+        
+        return { duplicate: false };
+    }
+
+    // Memuat data saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFromLocalStorage();
+        updateDateDisplay();
+        renderData();
+        renderVehicleManage();
+        
+        // Set max date untuk date input
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dateInput').max = today;
+    });
+
+    function switchTab(id, el, title) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('viewTitle').innerText = title;
+        
+        if (id === 'tab-data') {
+            renderData();
+            updateStats();
+        } else if (id === 'tab-vehicle') {
+            renderVehicleManage();
+        } else if (id === 'tab-export') {
+            updateDataInfo();
+        }
+    }
+
+    function openModalQuality(vIdx, qIdx = null) {
+        document.getElementById('targetVehicleIdx').value = vIdx;
+        document.getElementById('editQualityIdx').value = qIdx !== null ? qIdx : "";
+        document.getElementById('qModalTitle').innerText = qIdx !== null ? "Ubah Data" : "Tambah Data";
+        
+        if(qIdx !== null) {
+            const q = vehicles[vIdx].kualitas[qIdx];
+            document.getElementById('kadarAir').value = q.air;
+            document.getElementById('sap').value = q.sap;
+            document.getElementById('fisik').value = q.fisik;
+        } else {
+            document.getElementById('kadarAir').value = '';
+            document.getElementById('sap').value = 'KESELURUHAN';
+            document.getElementById('fisik').value = '';
+        }
+        
+        const dl = document.getElementById('fisikList'); dl.innerHTML = '';
+        physicalHistory.forEach(h => { dl.innerHTML += `<option value="${h}">`; });
+        document.getElementById('modalQuality').style.display = 'flex';
+    }
+
+    function simpanKendaraan() {
+        const nopol = document.getElementById('nopol').value.toUpperCase();
+        const noUrut = document.getElementById('noUrut').value;
+        const kategori = document.getElementById('kategori').value;
+        const editIdx = document.getElementById('editVehicleIdx').value;
+        
+        if(!nopol || !noUrut) {
+            showInfoModal('Data Tidak Lengkap', 'Nomor polisi dan nomor urut harus diisi.');
+            return;
+        }
+        
+        // Cek duplikasi
+        const duplicateCheck = checkDuplicateVehicle(nopol, editIdx !== "" ? parseInt(editIdx) : -1);
+        
+        if (duplicateCheck.duplicate) {
+            const existing = duplicateCheck.existingVehicle;
+            showInfoModal(
+                'Kendaraan Sudah Ada', 
+                `Nomor polisi ${nopol} sudah terdaftar:\n\n` +
+                `• No. Urut: ${existing.noUrut}\n` +
+                `• Tipe: ${existing.kategori}\n` +
+                `• Jumlah data: ${existing.kualitas.length}\n\n` +
+                `Silakan gunakan nomor polisi lain.`
+            );
+            return;
+        }
+        
+        if(editIdx !== "") {
+            vehicles[editIdx] = { ...vehicles[editIdx], nopol, noUrut, kategori };
+        } else {
+            vehicles.push({ nopol, noUrut, kategori, kualitas: [] });
+        }
+        
+        saveToLocalStorage();
+        resetVForm(); 
+        renderVehicleManage(); 
+        renderData();
+        
+        // Tampilkan pesan sukses
+        if (editIdx !== "") {
+            showInfoModal('Berhasil', `Data kendaraan ${nopol} berhasil diperbarui.`);
+        } else {
+            showInfoModal('Berhasil', `Kendaraan ${nopol} berhasil ditambahkan.`);
+        }
+    }
+
+    function resetVForm() {
+        document.getElementById('vFormTitle').innerText = "Unit Baru";
+        document.getElementById('editVehicleIdx').value = "";
+        document.getElementById('nopol').value = "";
+        document.getElementById('noUrut').value = "";
+        document.getElementById('kategori').value = "Reguler";
+        document.getElementById('btnSaveVehicle').innerText = "Simpan Kendaraan";
+        document.getElementById('btnCancelEdit').style.display = "none";
+    }
+
+    function editKendaraan(idx) {
+        document.getElementById('vFormTitle').innerText = "Edit Unit";
+        document.getElementById('editVehicleIdx').value = idx;
+        document.getElementById('nopol').value = vehicles[idx].nopol;
+        document.getElementById('noUrut').value = vehicles[idx].noUrut;
+        document.getElementById('kategori').value = vehicles[idx].kategori;
+        document.getElementById('btnSaveVehicle').innerText = "Update";
+        document.getElementById('btnCancelEdit').style.display = "flex";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function simpanKualitas() {
+        const vIdx = document.getElementById('targetVehicleIdx').value;
+        const qIdx = document.getElementById('editQualityIdx').value;
+        const data = { 
+            air: parseFloat(document.getElementById('kadarAir').value) || 0, 
+            sap: document.getElementById('sap').value, 
+            fisik: document.getElementById('fisik').value || "-" 
+        };
+        
+        if (!data.air || data.air <= 0) {
+            showInfoModal('Data Tidak Valid', 'Kadar air harus diisi dengan angka yang valid.');
+            return;
+        }
+        
+        if(data.fisik !== "-") physicalHistory.add(data.fisik);
+        if(qIdx !== "") vehicles[vIdx].kualitas[qIdx] = data;
+        else vehicles[vIdx].kualitas.push(data);
+        
+        saveToLocalStorage();
+        closeModal('modalQuality'); 
+        renderData();
+        
+        // Tampilkan pesan sukses
+        const vehicle = vehicles[vIdx];
+        showInfoModal('Berhasil', `Data kualitas untuk ${vehicle.nopol} berhasil disimpan.\n\n` +
+            `SAP: ${data.sap}\n` +
+            `Kadar Air: ${data.air}%\n` +
+            `Kondisi: ${data.fisik}`);
+    }
+
+    // Fungsi untuk capture satu kartu saja
+    function captureSingleCard(cardElement, vIdx) {
+        const originalDisplay = cardElement.style.display;
+        const originalMargin = cardElement.style.marginBottom;
+        
+        // Sembunyikan tombol-tombol aksi sebelum capture
+        const cardActions = cardElement.querySelector('.card-actions');
+        if (cardActions) {
+            cardActions.style.display = 'none';
+        }
+        
+        // Atur styling untuk capture yang lebih baik
+        cardElement.style.marginBottom = '20px';
+        
+        html2canvas(cardElement, { 
+            backgroundColor: null, 
+            scale: 2, 
+            borderRadius: 24,
+            useCORS: true,
+            logging: false 
+        }).then(canvas => {
+            // Kembalikan tampilan asli
+            cardElement.style.marginBottom = originalMargin;
+            if (cardActions) {
+                cardActions.style.display = 'flex';
+            }
+            
+            // Buat link untuk download
+            const link = document.createElement('a');
+            const vehicle = vehicles[vIdx];
+            link.download = `Data-${vehicle.nopol}-${currentDate}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }).catch(error => {
+            console.error('Error capturing card:', error);
+            showInfoModal('Error', 'Gagal mengambil gambar kartu. Silakan coba lagi.');
+        });
+    }
+
+    // Fungsi untuk share kartu via WhatsApp
+    function shareSingleCardToWA(vIdx) {
+        const vehicle = vehicles[vIdx];
+        if (!vehicle || vehicle.kualitas.length === 0) {
+            showInfoModal('Data Kosong', `Tidak ada data kualitas untuk kendaraan ${vehicle.nopol}.`);
+            return;
+        }
+        
+        const avg = vehicle.kualitas.length > 0 
+            ? (vehicle.kualitas.reduce((acc, q) => acc + q.air, 0) / vehicle.kualitas.length).toFixed(1) 
+            : 0;
+        
+        let text = `DATA KENDARAAN - ${formatDateID(currentDate).toUpperCase()}\n`;
+        text += `${vehicle.nopol} (No. Urut: ${vehicle.noUrut})\n`;
+        text += `Tipe: ${vehicle.kategori}\n`;
+        text += `Rata-rata: ${avg}%\n\n`;
+        text += `Detail Pengukuran:\n`;
+        
+        // Urutkan SAP untuk tampilan yang lebih rapi
+        const sortedQuality = [...vehicle.kualitas].sort((a, b) => {
+            if (a.sap === 'KESELURUHAN') return -1;
+            if (b.sap === 'KESELURUHAN') return 1;
+            return a.sap.localeCompare(b.sap);
+        });
+        
+        sortedQuality.forEach(q => {
+            const sapLabel = q.sap === 'KESELURUHAN' ? 'Keseluruhan' : `SAP ${q.sap}`;
+            text += `${sapLabel}: ${q.air}%`;
+            if (q.fisik && q.fisik !== "-") {
+                text += ` (${q.fisik})`;
+            }
+            text += `\n`;
+        });
+        
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function sendAllToWA() {
+        if(vehicles.length === 0) {
+            showInfoModal('Data Kosong', 'Tidak ada data kendaraan untuk dikirim.');
+            return;
+        }
+        
+        let text = `LAPORAN DATA HARIAN - ${formatDateID(currentDate).toUpperCase()}\n`;
+        text += `Total Unit: ${vehicles.length} (Reguler: ${vehicles.filter(v => v.kategori === 'Reguler').length}, Petani: ${vehicles.filter(v => v.kategori === 'Petani').length})\n`;
+        text += `===============================\n\n`;
+        
+        // TAMPILKAN DARI YANG TERBARU (terakhir ditambahkan - atas)
+        for (let i = vehicles.length - 1; i >= 0; i--) {
+            const v = vehicles[i];
+            const avg = v.kualitas.length > 0 
+                ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1) 
+                : 0;
+            
+            text += `${vehicles.length - i}. ${v.nopol} (No. Urut: ${v.noUrut})\n`;
+            text += `   Tipe: ${v.kategori}\n`;
+            text += `   Rata-rata: ${avg}%\n`;
+            
+            if (v.kualitas.length > 0) {
+                text += `   Detail:\n`;
+                const sortedQuality = [...v.kualitas].sort((a, b) => {
+                    if (a.sap === 'KESELURUHAN') return -1;
+                    if (b.sap === 'KESELURUHAN') return 1;
+                    return a.sap.localeCompare(b.sap);
+                });
+                
+                sortedQuality.forEach(q => {
+                    const sapLabel = q.sap === 'KESELURUHAN' ? 'Keseluruhan' : `   SAP ${q.sap}`;
+                    text += `${sapLabel}: ${q.air}%`;
+                    if (q.fisik && q.fisik !== "-") {
+                        text += ` (${q.fisik})`;
+                    }
+                    text += `\n`;
+                });
+            } else {
+                text += `   Belum ada data kualitas\n`;
+            }
+            
+            text += `\n`;
+        }
+        
+        text += `===============================\n`;
+        text += `Monitoring Quality Control`;
+        
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // Fungsi untuk proceed export setelah konfirmasi
+    function proceedExport() {
+        closeModal('modalExportConfirm');
+        
+        if (exportType === 'harian') {
+            exportTodaysData();
+        } else {
+            exportAllData();
+        }
+    }
+
+    // Fungsi untuk export data hari ini
+    function exportTodaysData() {
+        if (vehicles.length === 0) {
+            showInfoModal('Data Kosong', 'Tidak ada data hari ini untuk diexport.');
+            return;
+        }
+        
+        const dataToExport = {
+            vehicles: vehicles,
+            physicalHistory: Array.from(physicalHistory),
+            date: currentDate,
+            exportDate: new Date().toISOString(),
+            version: '1.0'
+        };
+        
+        const dataStr = JSON.stringify(dataToExport, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = `data-harian-${currentDate}.json`;
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        
+        showInfoModal('Export Berhasil', `Data harian ${currentDate} berhasil diexport!\n\nTotal: ${vehicles.length} unit kendaraan.`);
+    }
+
+    // Fungsi untuk export semua data
+    function exportAllData() {
+        const savedData = localStorage.getItem('qualityControlData');
+        if (!savedData || JSON.parse(savedData).vehicles.length === 0) {
+            showInfoModal('Data Kosong', 'Tidak ada data untuk diexport.');
+            return;
+        }
+        
+        const data = JSON.parse(savedData);
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = `data-semua-${new Date().toISOString().slice(0,10)}.json`;
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        
+        showInfoModal('Export Berhasil', `Semua data berhasil diexport!\n\nFile berisi ${data.vehicles.length} unit kendaraan.`);
+    }
+
+    // Fungsi untuk import data
+    function importData() {
+        const fileInput = document.getElementById('importFile');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            showInfoModal('Pilih File', 'Silakan pilih file JSON terlebih dahulu.');
+            return;
+        }
+        
+        showInfoModal('Konfirmasi Import', 
+            'Data lama akan diganti dengan data baru.\n\n' +
+            'Pastikan Anda telah melakukan backup data sebelumnya.\n\n' +
+            'Klik OK untuk melanjutkan import data.'
+        );
+        
+        // Buat event listener khusus untuk modal info OK
+        const modalInfo = document.getElementById('modalInfo');
+        const originalOnClick = modalInfo.querySelector('.btn-primary').onclick;
+        
+        modalInfo.querySelector('.btn-primary').onclick = function() {
+            modalInfo.querySelector('.btn-primary').onclick = originalOnClick;
+            closeModal('modalInfo');
+            proceedImport(file);
+        };
+    }
+
+    // Fungsi untuk proceed import setelah konfirmasi
+    function proceedImport(file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                
+                // Validasi struktur data
+                if (!importedData.vehicles || !Array.isArray(importedData.vehicles)) {
+                    throw new Error('Format file tidak valid. Data vehicles tidak ditemukan.');
+                }
+                
+                // Cek duplikasi dalam data yang akan diimport
+                const duplicateNopols = new Set();
+                const uniqueVehicles = [];
+                
+                for (const vehicle of importedData.vehicles) {
+                    const normalizedNopol = vehicle.nopol.toUpperCase().replace(/\s+/g, '');
+                    
+                    if (duplicateNopols.has(normalizedNopol)) {
+                        console.warn(`Duplikasi ditemukan dalam file import: ${vehicle.nopol}`);
+                        continue; // Skip duplikasi dalam file import
+                    }
+                    
+                    duplicateNopols.add(normalizedNopol);
+                    uniqueVehicles.push(vehicle);
+                }
+                
+                // Cek duplikasi dengan data yang sudah ada
+                const existingVehicles = vehicles;
+                const finalVehicles = [...existingVehicles];
+                let duplicateCount = 0;
+                
+                for (const importedVehicle of uniqueVehicles) {
+                    const duplicateCheck = checkDuplicateVehicle(importedVehicle.nopol);
+                    
+                    if (duplicateCheck.duplicate) {
+                        duplicateCount++;
+                        // Ganti data yang ada dengan data import
+                        const existingIndex = existingVehicles.findIndex(v => 
+                            v.nopol.toUpperCase().replace(/\s+/g, '') === 
+                            importedVehicle.nopol.toUpperCase().replace(/\s+/g, '')
+                        );
+                        
+                        if (existingIndex !== -1) {
+                            finalVehicles[existingIndex] = importedVehicle;
+                        }
+                    } else {
+                        finalVehicles.push(importedVehicle);
+                    }
+                }
+                
+                vehicles = finalVehicles;
+                physicalHistory = new Set(importedData.physicalHistory || []);
+                
+                saveToLocalStorage();
+                renderData();
+                renderVehicleManage();
+                
+                // Reset file input
+                document.getElementById('importFile').value = '';
+                
+                showInfoModal('Import Berhasil', 
+                    `Data berhasil diimport!\n\n` +
+                    `• Total unit: ${vehicles.length}\n` +
+                    `• Unit baru: ${uniqueVehicles.length - duplicateCount}\n` +
+                    `• Data yang diganti: ${duplicateCount}\n` +
+                    `• Total data kualitas: ${vehicles.reduce((sum, v) => sum + v.kualitas.length, 0)}`
+                );
+                
+            } catch (error) {
+                console.error('Error importing data:', error);
+                showInfoModal('Import Gagal', 
+                    'Error: ' + error.message + '\n\n' +
+                    'Pastikan file yang dipilih adalah file export dari aplikasi ini.'
+                );
+            }
+        };
+        
+        reader.onerror = function() {
+            showInfoModal('Error Membaca File', 'Error membaca file. Pastikan file tidak rusak.');
+        };
+        
+        reader.readAsText(file);
+    }
+
+    function captureToImage() {
+        if (vehicles.length === 0) {
+            showInfoModal('Data Kosong', 'Tidak ada data untuk difoto.');
+            return;
+        }
+        
+        const area = document.getElementById('captureArea');
+        html2canvas(area, { backgroundColor: null, scale: 2, borderRadius: 24 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Data-Harian-${currentDate}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
+
+    function renderData() {
+        const container = document.getElementById('outputContainer');
+        
+        if (vehicles.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i data-lucide="package" size="48"></i>
+                    <p>Belum ada data untuk hari ini</p>
+                    <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 10px;">Tambahkan unit kendaraan di tab "Unit"</p>
+                </div>
+            `;
+            lucide.createIcons();
+            return;
+        }
+        
+        container.innerHTML = '';
+        
+        // TAMPILKAN TERBARU DI ATAS (data terakhir ditambahkan)
+        for (let i = vehicles.length - 1; i >= 0; i--) {
+            const v = vehicles[i];
+            const avg = v.kualitas.length > 0 ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1) : "0.0";
+            const card = document.createElement('div');
+            card.className = 'glass-card';
+            card.id = `vehicle-card-${i}`;
+            
+            let qHtml = '';
+            v.kualitas.forEach((q, qIdx) => {
+                qHtml += `<div class="quality-item"><div style="font-size:0.75rem"><b>SAP ${q.sap}:</b> ${q.air}% <span style="opacity:0.5; margin-left:5px">${q.fisik}</span></div>
+                    <button class="btn btn-ghost" style="padding:5px" onclick="openModalQuality(${i}, ${qIdx})"><i data-lucide="edit-2" size="12"></i></button></div>`;
+            });
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div>
+                        <h3 style="font-weight:800; color:var(--text); font-size:1.1rem">${v.nopol}</h3>
+                        <p style="font-size:0.65rem; font-weight:700; opacity:0.5; display: flex; align-items: center; gap: 5px;">
+                            #${v.noUrut} 
+                            <span class="tipe-badge ${v.kategori === 'Reguler' ? 'tipe-reguler' : 'tipe-petani'}">
+                                ${v.kategori}
+                            </span>
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:8px">
+                        <div class="avg-badge">AVG ${avg}%</div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-sm btn-ghost" onclick="shareSingleCardToWA(${i})" title="Share via WA">
+                        <i data-lucide="share-2" size="14"></i>
+                    </button>
+                    <button class="btn btn-sm btn-ghost" onclick="captureSingleCard(document.getElementById('vehicle-card-${i}'), ${i})" title="Ambil Gambar">
+                        <i data-lucide="camera" size="14"></i>
+                    </button>
+                </div>
+                ${qHtml}
+                <button class="btn btn-full btn-ghost" style="font-size:0.75rem" onclick="openModalQuality(${i})">
+                    <i data-lucide="plus" size="14"></i> Tambah Detail
+                </button>
+            `;
+            container.appendChild(card);
+        }
+        lucide.createIcons();
+    }
+
+    function renderVehicleManage() {
+        const container = document.getElementById('vehicleManageList');
+        container.innerHTML = '<p style="font-size:0.7rem; font-weight:800; opacity:0.4; margin:10px 0">DATA UNIT HARIAN</p>';
+        
+        if (vehicles.length === 0) {
+            container.innerHTML += '<div style="text-align:center; padding:30px; opacity:0.3">Belum ada data unit hari ini</div>';
+            return;
+        }
+        
+        // TAMPILKAN TERBARU DI ATAS (data terakhir ditambahkan)
+        for (let i = vehicles.length - 1; i >= 0; i--) {
+            const v = vehicles[i];
+            const badgeClass = v.kategori === 'Reguler' ? 'tipe-reguler' : 'tipe-petani';
+            container.innerHTML += `
+                <div class="glass-card" style="padding:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center">
+                    <div>
+                        <div style="font-weight:800; font-size:0.9rem; display: flex; align-items: center; gap: 8px;">
+                            ${v.nopol}
+                            <span class="tipe-badge ${badgeClass}" style="font-size: 0.5rem;">${v.kategori}</span>
+                        </div>
+                        <div style="font-size:0.6rem; opacity:0.5; display:flex; align-items:center; justify-content: space-between;">
+                            <span>No. Urut: ${v.noUrut}</span>
+                            <span style="font-size:0.55rem; background: rgba(99, 102, 241, 0.1); padding: 2px 6px; border-radius: 8px;">
+                                ${v.kualitas.length} data
+                            </span>
+                        </div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="btn btn-sm btn-ghost" onclick="editKendaraan(${i})" title="Edit">
+                            <i data-lucide="edit-2" size="14"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="showDeleteVehicleModal(${i})" title="Hapus">
+                            <i data-lucide="trash-2" size="14"></i>
+                        </button>
+                    </div>
+                </div>`;
+        }
+        lucide.createIcons();
+    }
+
+    // Event listener untuk klik di luar modal
+    window.onclick = function(e) {
+        if (e.target.className === 'modal-overlay' || 
+            e.target.className === 'modal-center') {
+            e.target.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
