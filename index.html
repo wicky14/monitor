@@ -516,6 +516,21 @@
     </div>
 </div>
 
+<div id="modalDeleteQuality" class="modal-center">
+    <div class="modal-center-content">
+        <h3 style="margin-bottom:1.5rem; font-weight:800">Hapus Data Kualitas</h3>
+        <div class="alert-message" style="margin-bottom: 20px;">
+            <i data-lucide="alert-triangle" size="16" style="vertical-align: middle; margin-right: 8px;"></i>
+            <span id="deleteQualityMessage">Data kualitas ini akan dihapus. Tindakan ini tidak dapat dibatalkan.</span>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <p style="font-size: 0.8rem; color: #64748b;" id="deleteQualityDetails"></p>
+        </div>
+        <button class="btn btn-full btn-danger" onclick="deleteQualityConfirmed()">Ya, Hapus Data</button>
+        <button class="btn btn-full btn-ghost" onclick="closeModal('modalDeleteQuality')">Batal</button>
+    </div>
+</div>
+
 <nav class="bottom-nav">
     <div class="nav-item" onclick="switchTab('tab-vehicle', this, 'Kendaraan')">
         <i data-lucide="plus-square"></i><div>Unit</div>
@@ -535,6 +550,8 @@
     let currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
     let exportType = ''; // Untuk menyimpan jenis export yang dipilih
     let deleteVehicleIndex = null; // Untuk menyimpan index kendaraan yang akan dihapus
+    let deleteQualityVehicleIndex = null; // Untuk menyimpan index kendaraan yang akan dihapus kualitasnya
+    let deleteQualityIndex = null; // Untuk menyimpan index kualitas yang akan dihapus
 
     // KEYS UNTUK LOCAL STORAGE
     const DATA_KEY_PREFIX = 'qualityControlData_';
@@ -621,6 +638,25 @@
         `;
 
         document.getElementById('modalDeleteVehicle').style.display = 'flex';
+    }
+    
+    // Fungsi untuk menampilkan modal konfirmasi hapus kualitas
+    function showDeleteQualityModal(vIdx, qIdx) {
+        deleteQualityVehicleIndex = vIdx;
+        deleteQualityIndex = qIdx;
+        const vehicle = vehicles[vIdx];
+        const quality = vehicle.kualitas[qIdx];
+        
+        document.getElementById('deleteQualityMessage').textContent = `Data kualitas ini akan dihapus. Tindakan ini tidak dapat dibatalkan.`;
+        document.getElementById('deleteQualityDetails').innerHTML = `
+            • Kendaraan: ${vehicle.nopol} (No. ${vehicle.noUrut})<br>
+            • SAP: ${quality.sap}<br>
+            • Kadar Air: ${quality.air}%<br>
+            • Kondisi Fisik: ${quality.fisik}
+        `;
+    
+        document.getElementById('modalDeleteQuality').style.display = 'flex';
+        lucide.createIcons();
     }
 
     // Fungsi untuk menghapus kendaraan setelah konfirmasi
@@ -837,6 +873,11 @@
 
         return { duplicate: false };
     }
+    
+    // Fungsi untuk menghapus data kualitas
+    function deleteQuality(vIdx, qIdx) {
+        showDeleteQualityModal(vIdx, qIdx);
+    }
 
     // Memuat data saat halaman dimuat
     document.addEventListener('DOMContentLoaded', function() {
@@ -852,6 +893,24 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('dateInput').max = today;
     });
+    
+    // Fungsi untuk menghapus data kualitas setelah konfirmasi
+    function deleteQualityConfirmed() {
+        if (deleteQualityVehicleIndex !== null && deleteQualityIndex !== null) {
+            const vehicle = vehicles[deleteQualityVehicleIndex];
+            const quality = vehicle.kualitas[deleteQualityIndex];
+            
+            vehicles[deleteQualityVehicleIndex].kualitas.splice(deleteQualityIndex, 1);
+            saveToLocalStorage();
+            renderData();
+            closeModal('modalDeleteQuality');
+            
+            showInfoModal('Berhasil', `Data kualitas untuk ${vehicle.nopol} berhasil dihapus.`);
+            
+            deleteQualityVehicleIndex = null;
+            deleteQualityIndex = null;
+        }
+    }
 
     function switchTab(id, el, title) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -1355,8 +1414,20 @@
 
             let qHtml = '';
             v.kualitas.forEach((q, qIdx) => {
-                qHtml += `<div class="quality-item"><div style="font-size:0.75rem"><b>SAP ${q.sap}:</b> ${q.air}% <span style="opacity:0.5; margin-left:5px">${q.fisik}</span></div>
-                    <button class="btn btn-ghost" style="padding:5px" onclick="openModalQuality(${i}, ${qIdx})"><i data-lucide="edit-2" size="12"></i></button></div>`;
+                qHtml += `<div class="quality-item">
+                    <div style="font-size:0.75rem">
+                        <b>SAP ${q.sap}:</b> ${q.air}% 
+                        <span style="opacity:0.5; margin-left:5px">${q.fisik}</span>
+                    </div>
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn btn-ghost" style="padding:5px" onclick="openModalQuality(${i}, ${qIdx})" title="Edit">
+                            <i data-lucide="edit-2" size="12"></i>
+                        </button>
+                        <button class="btn btn-danger" style="padding:5px; min-width:auto;" onclick="showDeleteQualityModal(${i}, ${qIdx})" title="Hapus">
+                            <i data-lucide="trash-2" size="12"></i>
+                        </button>
+                    </div>
+                </div>`;
             });
 
             card.innerHTML = `
