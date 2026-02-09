@@ -1038,7 +1038,7 @@
         }
 
         const avg = vehicle.kualitas.length > 0
-            ? (vehicle.kualitas.reduce((acc, q) => acc + q.air, 0) / vehicle.kualitas.length).toFixed(1)
+            ? (vehicle.kualitas.reduce((acc, q) => acc + q.air, 0) / vehicle.kualitas.length).toFixed(2)
             : 0;
 
         let text = `DATA KENDARAAN - ${formatDateID(currentDate).toUpperCase()}\n`;
