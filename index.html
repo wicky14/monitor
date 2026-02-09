@@ -1080,7 +1080,7 @@
         for (let i = vehicles.length - 1; i >= 0; i--) {
             const v = vehicles[i];
             const avg = v.kualitas.length > 0
-                ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1)
+                ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(2)
                 : 0;
 
             text += `${vehicles.length - i}. ${v.nopol} (No. Urut: ${v.noUrut})\n`;
@@ -1348,7 +1348,7 @@
         // TAMPILKAN TERBARU DI ATAS (data terakhir ditambahkan)
         for (let i = vehicles.length - 1; i >= 0; i--) {
             const v = vehicles[i];
-            const avg = v.kualitas.length > 0 ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(1) : "0.0";
+            const avg = v.kualitas.length > 0 ? (v.kualitas.reduce((acc, q) => acc + q.air, 0) / v.kualitas.length).toFixed(2) : "0.0";
             const card = document.createElement('div');
             card.className = 'glass-card';
             card.id = `vehicle-card-${i}`;
